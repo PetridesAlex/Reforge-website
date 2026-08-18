@@ -36,11 +36,11 @@
   --font-sans: var(--font-dm-sans);
 }
 
-html.reforge-booting body {
+html[data-reforge-booting="1"] body {
   overflow: hidden;
 }
 
-html.reforge-booting body::before {
+html[data-reforge-booting="1"] body::before {
   content: "";
   position: fixed;
   inset: 0;

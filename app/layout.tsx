@@ -47,11 +47,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${bebas.variable} ${dmSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${bebas.variable} ${dmSans.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-text font-sans">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(!sessionStorage.getItem("reforge-intro"))document.documentElement.classList.add("reforge-booting")}catch(e){}`,
+            __html: `try{if(!sessionStorage.getItem("reforge-intro"))document.documentElement.setAttribute("data-reforge-booting","1")}catch(e){}`,
           }}
         />
         <JsonLd />

@@ -22,6 +22,6 @@ export function introSeen() {
 
 export function markIntroSeen() {
   window.sessionStorage.setItem(INTRO_KEY, "1");
-  document.documentElement.classList.remove("reforge-booting");
+  document.documentElement.removeAttribute("data-reforge-booting");
   window.dispatchEvent(new Event(READY_EVENT));
 }
