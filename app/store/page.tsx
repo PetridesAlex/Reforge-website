@@ -19,17 +19,18 @@ export default async function StorePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-28 pb-20">
+      <section className="relative min-h-[52vh] overflow-hidden pt-28 pb-24 sm:min-h-[60vh]">
         <Image
-          src="/images/store/hero.webp"
+          src="/images/gym/dumbbells-wod.webp"
           alt=""
           fill
           priority
-          className="object-cover opacity-40"
+          className="object-cover object-[center_35%]"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background" />
-        <Container className="relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/25" />
+        <div className="texture absolute inset-0 opacity-25" />
+        <Container className="relative flex min-h-[28vh] items-end sm:min-h-[32vh]">
           <SectionHeading
             kicker="Store"
             title={"WEAR\nTHE WORK."}
