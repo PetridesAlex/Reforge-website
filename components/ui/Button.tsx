@@ -43,13 +43,13 @@ function SlideLabel({
   }
 
   return (
-    <span className="relative z-10 block overflow-hidden leading-none">
-      <span className="block whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full group-active:duration-200">
+    <span className="relative z-10 inline-grid overflow-hidden leading-none">
+      <span className="col-start-1 row-start-1 whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full group-active:duration-200">
         {children}
       </span>
       <span
         aria-hidden
-        className="absolute inset-x-0 top-0 block whitespace-nowrap translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-active:duration-200"
+        className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-active:duration-200"
       >
         {children}
       </span>

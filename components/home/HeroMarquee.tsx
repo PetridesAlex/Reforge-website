@@ -17,25 +17,26 @@ export function HeroMarquee() {
 
   return (
     <section
-      className="relative h-[220px] overflow-hidden border-y border-border bg-bg-deep sm:h-[280px]"
+      className="relative h-[260px] overflow-hidden border-y border-border bg-bg-deep sm:h-[340px] lg:h-[400px]"
       aria-label="REFORGE"
     >
       {reduced ? (
-        <p className="font-display flex h-full items-center justify-center px-5 text-center text-2xl leading-none text-accent sm:text-4xl">
+        <p className="font-display flex h-full items-center justify-center px-5 text-center text-4xl leading-none text-accent sm:text-6xl">
           {items.slice(0, 3).join("  ·  ")}
         </p>
       ) : (
         <BendingMarquee
           items={items}
           separator="+"
-          bend={48}
-          speed={18}
+          bend={42}
+          speed={20}
           rows={2}
-          panelWidth={380}
-          panelHeight={520}
-          fontSize={28}
+          panelWidth={520}
+          panelHeight={360}
+          fontSize={48}
           fontWeight={400}
-          letterSpacing={2}
+          letterSpacing={3}
+          itemGap={32}
           color="#c8ff00"
           bandColor="#0a0a0a"
           className="font-display"

@@ -48,8 +48,16 @@ export function Navbar() {
         <div className="mx-auto grid h-[72px] max-w-[90rem] grid-cols-[1fr_auto] items-center px-5 sm:h-20 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <Link
             href="/"
+            scroll
             className="flex shrink-0 items-center gap-2.5 justify-self-start sm:gap-3"
             aria-label="REFORGE home"
+            onClick={(event) => {
+              setOpen(false);
+              if (pathname === "/") {
+                event.preventDefault();
+              }
+              window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            }}
           >
             <Image
               src="/brand/reforge-logo.png"

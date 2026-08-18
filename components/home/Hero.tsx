@@ -24,25 +24,25 @@ export function Hero() {
       revealContent
       reduced={reduced}
       media={<HeroBackdrop reduced={reduced} />}
-      persistent={
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-          <div className="pointer-events-auto mx-auto flex w-full max-w-7xl flex-wrap gap-4 px-5 pb-16 sm:px-8 sm:pb-20">
-            <Button href="/join">Join REFORGE</Button>
-            <Button href="/training" variant="secondary">
+    >
+      <div className="flex h-full w-full flex-col justify-end px-5 pb-8 pt-28 sm:px-8 sm:pb-12 md:pb-16">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-accent sm:text-[12px] sm:tracking-[0.32em]">
+              Welcome to
+            </p>
+            <h1 className="font-display mt-2 text-[3.25rem] leading-[0.86] text-text sm:mt-3 sm:text-8xl lg:text-[7.5rem]">
+              REFORGE
+            </h1>
+          </div>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:gap-4">
+            <Button href="/join" className="w-full sm:w-auto">
+              Join REFORGE
+            </Button>
+            <Button href="/training" variant="secondary" className="w-full sm:w-auto">
               Explore training
             </Button>
           </div>
-        </div>
-      }
-    >
-      <div className="flex h-full w-full flex-col justify-end px-5 pb-36 sm:px-8 sm:pb-44">
-        <div className="mx-auto w-full max-w-7xl">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-accent">
-            Welcome to
-          </p>
-          <h1 className="font-display mt-3 max-w-4xl text-6xl leading-[0.86] text-text sm:text-8xl lg:text-[7.5rem]">
-            REFORGE
-          </h1>
         </div>
       </div>
     </ScrollMask>
