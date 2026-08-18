@@ -27,18 +27,15 @@ export function Preloader() {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (!shouldShow) {
+
+    if (!shouldShow || done) {
       markIntroSeen();
       return;
     }
 
-    document.body.style.overflow = "hidden";
     const hide = window.setTimeout(() => setDone(true), DURATION_MS);
-    return () => {
-      window.clearTimeout(hide);
-      document.body.style.overflow = "";
-    };
-  }, [hydrated, shouldShow]);
+    return () => window.clearTimeout(hide);
+  }, [done, hydrated, shouldShow]);
 
   return (
     <AnimatePresence onExitComplete={markIntroSeen}>

@@ -23,5 +23,7 @@ export function introSeen() {
 export function markIntroSeen() {
   window.sessionStorage.setItem(INTRO_KEY, "1");
   document.documentElement.removeAttribute("data-reforge-booting");
+  document.body.style.removeProperty("overflow");
+  document.documentElement.style.removeProperty("overflow");
   window.dispatchEvent(new Event(READY_EVENT));
 }
