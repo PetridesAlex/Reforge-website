@@ -27,6 +27,29 @@ import type {
   WeeklyChallenge,
 } from "@/types";
 
+const pillars = [
+  {
+    label: "Training",
+    title: "Purpose over noise.",
+    body: "Strength, engine, and movement programmed for real output — not random work.",
+  },
+  {
+    label: "Performance",
+    title: "Proof on the board.",
+    body: "Personal bests, weekly challenges, and progress you can actually check.",
+  },
+  {
+    label: "Community",
+    title: "The floor is shared.",
+    body: "Train together. Compete together. Public highlights stay honest.",
+  },
+  {
+    label: "Consistency",
+    title: "Show up again.",
+    body: "The standard is the next session — not a one-off effort.",
+  },
+] as const;
+
 function Intro() {
   return (
     <section className="border-t border-border py-24 sm:py-32">
@@ -51,13 +74,25 @@ function Intro() {
         </Reveal>
       </Container>
       <Container className="mt-16">
-        <Stagger className="grid gap-px bg-border sm:grid-cols-4" stagger={0.1}>
-          {["Training", "Performance", "Community", "Consistency"].map((item) => (
-            <StaggerItem key={item}>
-              <div className="bg-background px-6 py-8">
-                <p className="text-[11px] uppercase tracking-[0.24em] text-accent">{item}</p>
-                <p className="font-display mt-3 text-3xl">The standard.</p>
-              </div>
+        <Stagger className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
+          {pillars.map((pillar, i) => (
+            <StaggerItem key={pillar.label}>
+              <article className="group relative h-full bg-background px-6 py-8 transition-colors duration-500 hover:bg-surface">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"
+                />
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+                    {pillar.label}
+                  </p>
+                  <p className="font-display text-xl leading-none text-text-muted">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                </div>
+                <h3 className="font-display mt-6 text-3xl leading-[0.92] sm:text-4xl">{pillar.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-text-secondary">{pillar.body}</p>
+              </article>
             </StaggerItem>
           ))}
         </Stagger>
@@ -116,7 +151,7 @@ function CommunityPreview({ posts }: { posts: CommunityPost[] }) {
         <SectionHeading
           kicker="Community"
           title={"TRAIN TOGETHER.\nGROW TOGETHER."}
-          subtitle="Public highlights only. Private member posts stay in the app."
+          subtitle="A look at life on the floor — sessions, shout-outs, and the work we celebrate together. The full conversation lives in the REFORGE app."
         />
         <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
           {posts.slice(0, 3).map((post) => (
@@ -144,17 +179,17 @@ function CoachesPreview({ coaches }: { coaches: Coach[] }) {
     <section className="border-t border-border py-24 sm:py-32">
       <Container>
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-          <SectionHeading kicker="Coaches" title={"THE PEOPLE\nBEHIND THE WORK."} />
+          <SectionHeading kicker="Coaches" title={"THE PERSON\nBEHIND THE WORK."} />
           <Reveal delay={0.1}>
             <Button href="/coaches" variant="secondary">
-              Meet the team
+              Meet the coach
             </Button>
           </Reveal>
         </div>
-        <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
+        <Stagger className={coaches.length === 1 ? "mt-14" : "mt-14 grid gap-6 md:grid-cols-3"}>
           {coaches.slice(0, 3).map((coach) => (
             <StaggerItem key={coach.id}>
-              <CoachCard coach={coach} />
+              <CoachCard coach={coach} featured={coaches.length === 1} />
             </StaggerItem>
           ))}
         </Stagger>

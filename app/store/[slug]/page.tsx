@@ -27,6 +27,9 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  const related = (await getProducts())
+    .filter((item) => item.id !== product.id)
+    .slice(0, 3);
 
   const jsonLd =
     product.priceCents !== null
@@ -57,7 +60,10 @@ export default async function ProductPage({ params }: Props) {
         />
       ) : null}
       <Container>
-        <ProductDetail product={product} />
+        <ProductDetail
+          product={product}
+          related={related}
+        />
       </Container>
     </section>
   );

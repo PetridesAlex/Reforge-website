@@ -1,3 +1,6 @@
+import { STUDIO_TIME_ZONE, studioDayKey } from "@/lib/utils/studio-time";
+import type { DayKey } from "@/types";
+
 export function formatDuration(minutes: number) {
   return `${minutes} MIN`;
 }
@@ -10,6 +13,7 @@ export function formatTime(isoOrTime: string) {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
+    timeZone: STUDIO_TIME_ZONE,
   });
 }
 
@@ -23,6 +27,7 @@ export function formatDateRange(startsAt: string, endsAt: string) {
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: STUDIO_TIME_ZONE,
   });
   return `${date} · ${formatTime(startsAt)}–${formatTime(endsAt)}`;
 }
@@ -48,8 +53,6 @@ export function timeRemaining(endsAt: string) {
   return `${hours}h ${minutes}m remaining`;
 }
 
-export function dayKey(iso: string) {
-  const date = new Date(iso);
-  const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
-  return days[date.getDay()];
+export function dayKey(iso: string): DayKey {
+  return studioDayKey(iso);
 }

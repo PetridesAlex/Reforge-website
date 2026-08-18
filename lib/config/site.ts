@@ -37,6 +37,17 @@ export const siteConfig = {
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || null,
   whatsappUrl: `https://wa.me/35799860056`,
   checkoutEnabled: false,
+  store: {
+    shipsTo: "Cyprus",
+    pickupLabel: "Pickup at City Box Gym",
+    pickupDetail: "Augoustas Theodoras 9, Limassol 3035",
+    deliveryLabel: "Cyprus delivery",
+    deliveryDetail: "Island-wide. Sample rate until live shipping is connected.",
+    pickupCents: 0,
+    cyprusDeliveryCents: 500,
+    isPlaceholderShipping: true,
+    isPlaceholderCatalog: true,
+  },
   email: {
     contactTo: process.env.RESEND_TO_EMAIL ?? null,
     from: process.env.RESEND_FROM_EMAIL ?? null,
@@ -72,6 +83,7 @@ export const footerNav = {
   ],
   legal: [
     { href: "/privacy", label: "Privacy" },
+    { href: "/cookies", label: "Cookies" },
     { href: "/terms", label: "Terms" },
   ],
 } as const;

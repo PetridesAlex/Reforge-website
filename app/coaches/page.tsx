@@ -20,12 +20,12 @@ export default async function CoachesPage() {
         <SectionHeading
           kicker="Coaches"
           title={"THE STANDARD\nHAS A FACE."}
-          subtitle="Bios, specialties, and certifications will be published as they are confirmed. Placeholder profiles are clearly marked."
+          subtitle="Andreas Petrides coaches the floor at City Box Gym. More coaches will be added here as they are confirmed."
         />
-        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className={coaches.length === 1 ? "mt-14" : "mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"} stagger={0.1}>
           {coaches.map((coach) => (
             <StaggerItem key={coach.id}>
-              <CoachCard coach={coach} />
+              <CoachCard coach={coach} featured={coaches.length === 1} />
             </StaggerItem>
           ))}
         </Stagger>

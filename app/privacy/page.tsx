@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/motion/Reveal";
 
@@ -21,14 +22,21 @@ export default function PrivacyPage() {
             being treated as a live privacy policy.
           </p>
           <p>
-            REFORGE may collect name, email, phone, and enquiry details submitted through this website.
-            Membership and training data in the REFORGE mobile app is governed separately.
+            REFORGE may collect name, email, phone, and enquiry details submitted through this website,
+            including email addresses entered in the newsletter form. Membership and training data in
+            the REFORGE mobile app is governed separately.
           </p>
           <p>
             Contact and membership forms are processed on our servers. Email notifications may be sent
             through Resend. Data stored in Supabase is subject to that project&apos;s access controls.
           </p>
-          <p>A complete privacy policy will replace this placeholder after business and legal review.</p>
+          <p>
+            A complete privacy policy will replace this placeholder after business and legal review. See also{" "}
+            <Link href="/cookies" className="text-accent">
+              cookies
+            </Link>
+            .
+          </p>
           </div>
         </Reveal>
       </Container>

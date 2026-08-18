@@ -3,32 +3,31 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/store/cart-context";
-import { getCheckoutAdapter } from "@/lib/store/checkout";
-import { siteConfig } from "@/lib/config/site";
 import { formatPrice } from "@/lib/utils/format";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { useState } from "react";
+import { cartSubtotalCents } from "@/lib/store/shipping";
+import { siteConfig } from "@/lib/config/site";
 
 export function CartPageClient() {
   const { items, updateQuantity, removeItem, clear, count } = useCart();
-  const [message, setMessage] = useState<string | null>(null);
-
-  async function checkout() {
-    const adapter = getCheckoutAdapter();
-    const result = await adapter.createSession(items);
-    setMessage(result.message);
-    if (result.url) window.location.href = result.url;
-  }
+  const subtotal = cartSubtotalCents(items);
 
   return (
     <section className="pt-28 pb-24">
       <Container className="max-w-3xl">
-        <SectionHeading kicker="Cart" title="YOUR CART." />
+        <SectionHeading
+          kicker="Cart"
+          title="YOUR CART."
+          subtitle={`Ships in ${siteConfig.store.shipsTo}. Pickup at ${siteConfig.studio.venue}, ${siteConfig.studio.city}.`}
+        />
         {items.length === 0 ? (
           <p className="mt-10 text-text-secondary">
-            Cart is empty. <Link href="/store" className="text-accent">Shop REFORGE</Link>
+            Cart is empty.{" "}
+            <Link href="/store" className="text-accent">
+              Shop REFORGE
+            </Link>
           </p>
         ) : (
           <>
@@ -67,19 +66,17 @@ export function CartPageClient() {
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-sm text-text-muted">{count} items</p>
-            {!siteConfig.checkoutEnabled ? (
-              <p className="mt-4 text-sm text-text-secondary">
-                Online checkout is coming soon. No payment will be taken. You can enquire to reserve these pieces.
-              </p>
-            ) : null}
-            {message ? <p className="mt-4 text-sm text-accent">{message}</p> : null}
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-sm text-text-muted">{count} items</p>
+              <p className="font-display text-3xl">{formatPrice(subtotal)}</p>
+            </div>
+            <p className="mt-4 text-sm text-text-secondary">
+              Shipping is selected at checkout. Card payment via Stripe comes later — this order is received first.
+            </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button onClick={checkout}>
-                {siteConfig.checkoutEnabled ? "Checkout" : "Checkout unavailable"}
-              </Button>
-              <Button href="/contact" variant="secondary">
-                Enquire to reserve
+              <Button href="/checkout">Checkout</Button>
+              <Button href="/store" variant="secondary">
+                Continue shopping
               </Button>
               <Button variant="ghost" onClick={clear}>
                 Clear

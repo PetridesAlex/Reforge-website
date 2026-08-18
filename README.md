@@ -57,7 +57,7 @@ A proposed migration lives at `supabase/migrations/043_website_public_access.sql
 
 - `featured_on_website` on community posts
 - public coach listing without email/phone
-- `website_membership_leads` and `website_contact_inquiries` (no public read)
+- `website_membership_leads`, `website_contact_inquiries`, and `website_newsletter_subscribers` (no public read)
 
 Until that migration is applied, coaches, community highlights, and lead storage use mocks / skip inserts.
 
@@ -65,7 +65,7 @@ Until that migration is applied, coaches, community highlights, and lead storage
 
 1. Create a Resend account and verify a sending domain.
 2. Set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_TO_EMAIL`.
-3. Contact and membership forms send from Server Actions only.
+3. Contact, membership, and newsletter forms send from Server Actions only.
 
 ## Commands
 

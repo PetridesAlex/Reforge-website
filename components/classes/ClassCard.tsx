@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { GymClass } from "@/types";
@@ -22,12 +25,20 @@ export function ClassCard({
       : gymClass.enrolledCount >= gymClass.capacity
         ? "Full"
         : `${gymClass.capacity - gymClass.enrolledCount} spaces`;
+  const [now] = useState(() => Date.now());
+  const start = new Date(gymClass.startsAt).getTime();
+  const end = new Date(gymClass.endsAt).getTime();
+  const ended = Number.isFinite(end) ? end <= now : start <= now;
+  const live = start <= now && end > now;
+  const stamp = ended ? "Ended" : live ? "Live" : featured ? "Up next" : dayKey(gymClass.startsAt);
 
   return (
     <article
       className={cn(
         "group relative grid grid-cols-[4.5rem_1fr] gap-4 overflow-hidden border-b border-border py-5 pl-4 transition-all duration-300 sm:grid-cols-[5.5rem_1fr_auto] sm:items-center sm:pl-5",
-        featured ? "bg-accent/8" : "hover:bg-surface",
+        ended && "opacity-55",
+        live && "bg-accent/10",
+        featured && !ended ? "bg-accent/8" : !live && "hover:bg-surface",
       )}
     >
       <span
@@ -39,13 +50,25 @@ export function ClassCard({
       />
       <div>
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-          {dayKey(gymClass.startsAt)}
+          {stamp}
         </p>
-        <p className="font-display mt-1 text-3xl leading-none text-accent">{formatTime(gymClass.startsAt)}</p>
+        <p
+          className={cn(
+            "font-display mt-1 text-3xl leading-none",
+            ended ? "text-text-muted" : "text-accent",
+          )}
+        >
+          {formatTime(gymClass.startsAt)}
+        </p>
       </div>
       <div>
         <div className="flex flex-wrap items-center gap-2">
-          {featured ? (
+          {live ? (
+            <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-accent" />
+              Live
+            </span>
+          ) : featured && !ended ? (
             <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">Up next</span>
           ) : null}
           <h3 className="font-display text-2xl leading-none text-text transition-colors duration-300 group-hover:text-accent">

@@ -4,17 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { useCart } from "@/lib/store/cart-context";
-import { siteConfig } from "@/lib/config/site";
 import { formatPrice } from "@/lib/utils/format";
 import { Button } from "@/components/ui/Button";
+import { cartSubtotalCents } from "@/lib/store/shipping";
+import { siteConfig } from "@/lib/config/site";
 
 export function CartDrawer() {
   const { items, open, setOpen, removeItem, updateQuantity, count } = useCart();
+  const subtotal = cartSubtotalCents(items);
 
   return (
     <>
       <div
-        className={`fixed inset-0 z-50 bg-black/60 transition-opacity ${
+        className={`fixed inset-0 z-50 bg-black/60 transition-opacity duration-300 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={() => setOpen(false)}
@@ -77,24 +79,28 @@ export function CartDrawer() {
           )}
         </div>
         <div className="border-t border-border p-5">
-          {siteConfig.checkoutEnabled ? (
-            <Button href="/cart" className="w-full">
-              Checkout
-            </Button>
-          ) : (
+          {items.length ? (
             <>
-              <p className="mb-4 text-sm text-text-secondary">
-                Online checkout is coming soon. You can review your cart or send an enquiry to reserve pieces.
+              <div className="mb-4 flex items-center justify-between text-sm">
+                <span className="uppercase tracking-[0.16em] text-text-muted">Subtotal</span>
+                <span>{formatPrice(subtotal)}</span>
+              </div>
+              <p className="mb-4 text-xs leading-relaxed text-text-muted">
+                Ships in {siteConfig.store.shipsTo}. Pickup at {siteConfig.studio.venue}, {siteConfig.studio.city}.
               </p>
               <div className="flex flex-col gap-3">
-                <Button href="/cart" className="w-full">
-                  View cart
+                <Button href="/checkout" className="w-full" onClick={() => setOpen(false)}>
+                  Checkout
                 </Button>
-                <Button href="/contact" variant="secondary" className="w-full">
-                  Enquire
+                <Button href="/cart" variant="secondary" className="w-full" onClick={() => setOpen(false)}>
+                  View cart
                 </Button>
               </div>
             </>
+          ) : (
+            <Button href="/store" className="w-full" onClick={() => setOpen(false)}>
+              Shop REFORGE
+            </Button>
           )}
         </div>
       </aside>

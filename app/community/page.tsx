@@ -21,11 +21,11 @@ export default async function CommunityPage() {
         <SectionHeading
           kicker="Community"
           title={"TRAIN TOGETHER.\nGROW TOGETHER."}
-          subtitle="Only content explicitly featured for the public website appears here. Private member posts stay in the REFORGE app."
+          subtitle="This is a look at how we actually train together — session highlights, coach notes, and the wins worth sharing. The everyday chat stays in the REFORGE app, with the people on the floor."
         />
         <div className="mt-6">
           <PlaceholderNote>
-            Public feed requires featured_on_website on approved posts. Sample highlights shown until that flag is live.
+            Sample highlights until the live public feed is connected. Private member posts stay in the app.
           </PlaceholderNote>
         </div>
         <Stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

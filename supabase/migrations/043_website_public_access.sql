@@ -89,7 +89,15 @@ create table if not exists public.website_contact_inquiries (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.website_newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  source text,
+  created_at timestamptz not null default now()
+);
+
 alter table public.website_membership_leads enable row level security;
 alter table public.website_contact_inquiries enable row level security;
+alter table public.website_newsletter_subscribers enable row level security;
 
 -- Inserts are performed server-side with the service role. No anon policies.

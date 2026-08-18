@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { Product, StoreCategorySlug } from "@/types";
 import { formatPrice } from "@/lib/utils/format";
@@ -10,7 +11,9 @@ import { useCart } from "@/lib/store/cart-context";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 
-const categoryLabel: Record<StoreCategorySlug, string> = {
+const ease = [0.22, 1, 0.36, 1] as const;
+
+export const categoryLabel: Record<StoreCategorySlug, string> = {
   "t-shirts": "T-Shirts",
   hoodies: "Hoodies",
   socks: "Socks",
@@ -26,6 +29,7 @@ export function ProductCard({
   index?: number;
   layout?: "catalog" | "lookbook";
 }) {
+  const reduced = useReducedMotion();
   const [quick, setQuick] = useState(false);
   const { addItem } = useCart();
   const [size, setSize] = useState(product.sizes[0] ?? "M");
@@ -33,21 +37,25 @@ export function ProductCard({
   const price = formatPrice(product.priceCents, product.currency);
 
   return (
-    <article className={cn("group", lookbook && "relative isolate min-h-[70vh] overflow-hidden bg-background md:min-h-[58vh]")}>
+    <motion.article
+      className={cn("group", lookbook && "relative isolate min-h-[70vh] overflow-hidden bg-background md:min-h-[58vh]")}
+      whileHover={reduced || lookbook ? undefined : { y: -6 }}
+      transition={{ duration: 0.45, ease }}
+    >
       <div className={cn("relative overflow-hidden bg-surface", lookbook ? "absolute inset-0" : "aspect-[4/5]")}>
         <Link href={`/store/${product.slug}`} className="absolute inset-0">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             sizes="(max-width: 768px) 100vw, 25vw"
             loading="lazy"
           />
-          <span className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+          <span className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10 opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
           <span
             aria-hidden
-            className="absolute inset-0 border border-transparent transition-colors duration-500 group-hover:border-accent/50"
+            className="absolute inset-0 border border-transparent transition-colors duration-500 group-hover:border-accent/55"
           />
         </Link>
         {typeof index === "number" ? (
@@ -62,13 +70,13 @@ export function ProductCard({
           type="button"
           onClick={() => setQuick(true)}
           className={cn(
-            "absolute inset-x-0 z-10 flex items-center justify-between bg-background/92 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm transition-all duration-500 motion-reduce:translate-y-0",
+            "absolute inset-x-0 z-10 flex items-center justify-between bg-background/92 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm transition-all duration-500 motion-reduce:translate-y-0 motion-reduce:opacity-100",
             lookbook
-              ? "bottom-0 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
-              : "bottom-0 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100",
+              ? "bottom-0 translate-y-0 opacity-100 sm:translate-y-full sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+              : "bottom-0 translate-y-0 opacity-100 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100",
           )}
         >
-          Quick view
+          Quick add
           <ArrowRight size={14} />
         </button>
       </div>
@@ -87,10 +95,13 @@ export function ProductCard({
           {product.name}
         </Link>
         <div className="mt-3 flex items-end justify-between gap-3">
-          <p className="text-sm text-text-secondary">{price}</p>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
-            {product.sizes.join(" · ")}
+          <p className="text-sm text-text-secondary">
+            {price}
+            {product.isPlaceholderPrice ? (
+              <span className="ml-2 text-[10px] uppercase tracking-[0.16em] text-text-muted">Sample</span>
+            ) : null}
           </p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">{product.sizes.join(" · ")}</p>
         </div>
       </div>
 
@@ -102,8 +113,11 @@ export function ProductCard({
           aria-labelledby={`qv-${product.id}`}
           onClick={() => setQuick(false)}
         >
-          <div
-            className="grid w-full max-w-2xl overflow-hidden border border-border bg-bg-raised sm:grid-cols-[0.85fr_1.15fr]"
+          <motion.div
+            initial={reduced ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease }}
+            className="grid w-full max-w-2xl overflow-hidden border border-border bg-background sm:grid-cols-[0.85fr_1.15fr]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative hidden min-h-[320px] sm:block">
@@ -126,7 +140,9 @@ export function ProductCard({
                     onClick={() => setSize(s)}
                     className={cn(
                       "min-w-11 border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition-colors duration-200",
-                      size === s ? "border-accent text-accent" : "border-border text-text-secondary hover:border-accent/50",
+                      size === s
+                        ? "border-accent bg-accent text-background"
+                        : "border-border text-text-secondary hover:border-accent/50",
                     )}
                   >
                     {s}
@@ -150,9 +166,9 @@ export function ProductCard({
                 </Button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       ) : null}
-    </article>
+    </motion.article>
   );
 }

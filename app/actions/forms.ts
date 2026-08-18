@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { brandedEmail, sendNotificationEmail } from "@/lib/email/resend";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
-import { contactSchema, membershipSchema } from "@/lib/validation/forms";
+import { contactSchema, membershipSchema, newsletterSchema } from "@/lib/validation/forms";
 
 export type FormState = {
   ok: boolean;
@@ -163,4 +163,65 @@ export async function submitMembership(_prev: FormState, formData: FormData): Pr
   }
 
   return { ok: true, message: "Application received." };
+}
+
+export async function submitNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
+  const parsed = newsletterSchema.safeParse({
+    email: formData.get("email"),
+    website: formData.get("website"),
+  });
+
+  if (!parsed.success) {
+    return { ok: false, message: "Please check the form.", fieldErrors: firstError(parsed.error) };
+  }
+
+  if (parsed.data.website) {
+    return { ok: true, message: "You're on the list." };
+  }
+
+  const limit = rateLimit(`newsletter:${await clientKey()}`);
+  if (!limit.ok) {
+    return { ok: false, message: "Too many submissions. Try again later." };
+  }
+
+  const email = parsed.data.email.toLowerCase();
+  const html = brandedEmail({
+    title: "Newsletter signup",
+    intro: "Someone joined the REFORGE email list from the website footer.",
+    rows: [{ label: "Email", value: email }],
+  });
+
+  const emailResult = await sendNotificationEmail({
+    subject: `REFORGE newsletter: ${email}`,
+    html,
+  });
+
+  const service = createSupabaseServiceClient();
+  let stored = false;
+  if (service) {
+    const { data: existing } = await service
+      .from("website_newsletter_subscribers")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existing) {
+      return { ok: true, message: "You're already on the list." };
+    }
+
+    const { error } = await service.from("website_newsletter_subscribers").insert({
+      email,
+      source: "footer",
+    });
+    stored = !error;
+  }
+
+  if (!emailResult.sent && !stored) {
+    return {
+      ok: false,
+      message: "Signup could not be stored yet. Email and database are not configured.",
+    };
+  }
+
+  return { ok: true, message: "You're on the list." };
 }

@@ -15,7 +15,7 @@ export function StoreSection({ products }: { products: Product[] }) {
           <SectionHeading
             kicker="Store"
             title={"WEAR\nTHE WORK."}
-            subtitle="REFORGE merchandise. Live catalog, stock, and pricing load when connected."
+            subtitle="REFORGE merchandise. Ships in Cyprus. Pickup at City Box Gym."
           />
           <Reveal delay={0.1}>
             <Button href="/store" variant="secondary">

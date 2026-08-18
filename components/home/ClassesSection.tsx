@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import type { GymClass } from "@/types";
 import { Button } from "@/components/ui/Button";
@@ -7,7 +10,11 @@ import { ClassCard } from "@/components/classes/ClassCard";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
 
 export function ClassesSection({ classes }: { classes: GymClass[] }) {
-  const upcoming = classes.slice(0, 6);
+  const [now] = useState(() => Date.now());
+  const upcoming = [...classes]
+    .filter((gymClass) => new Date(gymClass.startsAt).getTime() >= now)
+    .sort((a, b) => a.startsAt.localeCompare(b.startsAt))
+    .slice(0, 6);
   const nextId = upcoming[0]?.id;
 
   return (
